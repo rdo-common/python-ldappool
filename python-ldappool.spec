@@ -2,7 +2,7 @@
 
 Name:           python-%{srcname}
 Version:        1.0
-Release:        8%{?dist}
+Release:        9%{?dist}
 Url:            https://github.com/mozilla-services/ldappool
 Summary:        A connection pool for python-ldap
 License:        MPLv1.1 and GPLv2+ and LGPLv2+
@@ -45,6 +45,9 @@ python setup.py install --prefix=%{_prefix} --root=%{buildroot}
 %{python_sitelib}/*
 
 %changelog
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.0-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.0-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
