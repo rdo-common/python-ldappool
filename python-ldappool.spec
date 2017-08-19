@@ -2,28 +2,36 @@
 
 Name:           python-%{srcname}
 Version:        1.0
-Release:        9%{?dist}
+Release:        10%{?dist}
 Url:            https://github.com/mozilla-services/ldappool
 Summary:        A connection pool for python-ldap
 License:        MPLv1.1 and GPLv2+ and LGPLv2+
 Group:          Development/Libraries
 Source:         http://pypi.python.org/packages/source/l/%{srcname}/%{srcname}-%{version}.tar.gz
 BuildRequires:  python2-devel
-Requires:       python-ldap
 BuildArch:      noarch
 
-%description
-A simple connector pool for python-ldap.
-
-The pool keeps LDAP connectors alive and let you reuse them,
-drastically reducing the time spent to initiate a ldap connection.
-
-The pool has useful features like:
-
-- transparent re-connection on failures or server restarts
-- configurable pool size and connectors timeouts
-- configurable max lifetime for connectors
+%global _description\
+A simple connector pool for python-ldap.\
+\
+The pool keeps LDAP connectors alive and let you reuse them,\
+drastically reducing the time spent to initiate a ldap connection.\
+\
+The pool has useful features like:\
+\
+- transparent re-connection on failures or server restarts\
+- configurable pool size and connectors timeouts\
+- configurable max lifetime for connectors\
 - a context manager to simplify acquiring and releasing a connector
+
+%description %_description
+
+%package -n python2-%{srcname}
+Summary: %summary
+Requires:       python-ldap
+%{?python_provide:%python_provide python2-%{srcname}}
+
+%description -n python2-%{srcname} %_description
 
 %prep
 %setup -q -n %{srcname}-%{version}
@@ -40,11 +48,15 @@ python setup.py install --prefix=%{_prefix} --root=%{buildroot}
 # FIXME: add license files as soon as upstream adds them
 # https://github.com/mozilla-services/ldappool/issues/2
 
-%files
+%files -n python2-%{srcname}
 %doc README.rst
 %{python_sitelib}/*
 
 %changelog
+* Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.0-10
+- Python 2 binary package renamed to python2-ldappool
+  See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.0-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
