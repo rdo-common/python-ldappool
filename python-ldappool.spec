@@ -1,14 +1,28 @@
 %global srcname ldappool
 
 Name:           python-%{srcname}
-Version:        1.0
-Release:        12%{?dist}
+
+Version:        2.1.0
+Release:        1%{?dist}
 Url:            https://github.com/mozilla-services/ldappool
 Summary:        A connection pool for python-ldap
 License:        MPLv1.1 and GPLv2+ and LGPLv2+
-Group:          Development/Libraries
-Source:         http://pypi.python.org/packages/source/l/%{srcname}/%{srcname}-%{version}.tar.gz
+Source:         https://files.pythonhosted.org/packages/source/l/%{srcname}/%{srcname}-%{version}.tar.gz
+
 BuildRequires:  python2-devel
+BuildRequires:  python2-ldap
+BuildRequires:  python2-pbr
+BuildRequires:  python2-testtools
+BuildRequires:  python2-testresources
+BuildRequires:  python2-testrepository
+
+BuildRequires:  python3-devel
+BuildRequires:  python3-pyldap
+BuildRequires:  python3-pbr
+BuildRequires:  python3-testtools
+BuildRequires:  python3-testresources
+BuildRequires:  python3-testrepository
+
 BuildArch:      noarch
 
 %global _description\
@@ -33,26 +47,47 @@ Requires:       python2-ldap
 
 %description -n python2-%{srcname} %_description
 
+%package -n python3-%{srcname}
+Summary: %summary
+Requires:       python3-pyldap
+%{?python_provide:%python_provide python3-%{srcname}}
+
+%description -n python3-%{srcname} %_description
+
 %prep
 %setup -q -n %{srcname}-%{version}
 
 %build
-python setup.py build
+%py2_build
+%py3_build
 
 %install
-python setup.py install --prefix=%{_prefix} --root=%{buildroot}
+%py2_install
+%py3_install
 
-# FIXME: tests are not launched since they require an active LDAP server
-# one could use nosetests to launch them
+%check
+%{__python3} setup.py testr
+%{__python2} setup.py testr
 
 # FIXME: add license files as soon as upstream adds them
 # https://github.com/mozilla-services/ldappool/issues/2
 
 %files -n python2-%{srcname}
 %doc README.rst
-%{python_sitelib}/*
+%{python2_sitelib}/%{srcname}
+%{python2_sitelib}/%{srcname}-%{version}-py?.?.egg-info
+
+%files -n python3-%{srcname}
+%doc README.rst
+%{python3_sitelib}/%{srcname}
+%{python3_sitelib}/%{srcname}-%{version}-py?.?.egg-info
+
 
 %changelog
+* Fri Apr 13 2018 Iryna Shcherbina <ishcherb@redhat.com> - 2.1.0-1
+- Update to version 2.1.0 and run tests
+- Add a Python 3 subpackage
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.0-12
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
