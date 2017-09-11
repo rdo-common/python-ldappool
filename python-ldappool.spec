@@ -1,5 +1,14 @@
 %global srcname ldappool
 
+%if 0%{?rhel}
+%global py2_prefix python
+%bcond_with python3
+%else
+%global py2_prefix python2
+%bcond_without python3
+%endif
+
+
 Name:           python-%{srcname}
 
 Version:        2.1.0
@@ -8,21 +17,6 @@ Url:            https://github.com/mozilla-services/ldappool
 Summary:        A connection pool for python-ldap
 License:        MPLv1.1 and GPLv2+ and LGPLv2+
 Source:         https://files.pythonhosted.org/packages/source/l/%{srcname}/%{srcname}-%{version}.tar.gz
-
-BuildRequires:  python2-devel
-BuildRequires:  python2-ldap
-BuildRequires:  python2-pbr
-BuildRequires:  python2-testtools
-BuildRequires:  python2-testresources
-BuildRequires:  python2-testrepository
-
-BuildRequires:  python3-devel
-BuildRequires:  python3-pyldap
-BuildRequires:  python3-pbr
-BuildRequires:  python3-testtools
-BuildRequires:  python3-testresources
-BuildRequires:  python3-testrepository
-
 BuildArch:      noarch
 
 %global _description\
@@ -42,31 +36,52 @@ The pool has useful features like:\
 
 %package -n python2-%{srcname}
 Summary: %summary
-Requires:       python2-ldap
+Requires:       %{py2_prefix}-ldap
+BuildRequires:  %{py2_prefix}-devel
+BuildRequires:  %{py2_prefix}-setuptools
+BuildRequires:  %{py2_prefix}-ldap
+BuildRequires:  %{py2_prefix}-pbr
+BuildRequires:  %{py2_prefix}-testtools
+BuildRequires:  %{py2_prefix}-testresources
+BuildRequires:  %{py2_prefix}-testrepository
 %{?python_provide:%python_provide python2-%{srcname}}
 
 %description -n python2-%{srcname} %_description
 
+%if %{with python3}
 %package -n python3-%{srcname}
 Summary: %summary
 Requires:       python3-pyldap
+BuildRequires:  python3-devel
+BuildRequires:  python3-pyldap
+BuildRequires:  python3-pbr
+BuildRequires:  python3-testtools
+BuildRequires:  python3-testresources
+BuildRequires:  python3-testrepository
 %{?python_provide:%python_provide python3-%{srcname}}
 
 %description -n python3-%{srcname} %_description
+%endif
 
 %prep
 %setup -q -n %{srcname}-%{version}
 
 %build
 %py2_build
+%if %{with python3}
 %py3_build
+%endif
 
 %install
 %py2_install
+%if %{with python3}
 %py3_install
+%endif
 
 %check
+%if %{with python3}
 %{__python3} setup.py testr
+%endif
 %{__python2} setup.py testr
 
 # FIXME: add license files as soon as upstream adds them
@@ -77,16 +92,19 @@ Requires:       python3-pyldap
 %{python2_sitelib}/%{srcname}
 %{python2_sitelib}/%{srcname}-%{version}-py?.?.egg-info
 
+%if %{with python3}
 %files -n python3-%{srcname}
 %doc README.rst
 %{python3_sitelib}/%{srcname}
 %{python3_sitelib}/%{srcname}-%{version}-py?.?.egg-info
+%endif
 
 
 %changelog
 * Fri Apr 13 2018 Iryna Shcherbina <ishcherb@redhat.com> - 2.1.0-1
 - Update to version 2.1.0 and run tests
 - Add a Python 3 subpackage
+- Add dependency on python-setuptools
 
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.0-12
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
