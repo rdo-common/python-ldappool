@@ -2,7 +2,7 @@
 
 Name:           python-%{srcname}
 Version:        1.0
-Release:        10%{?dist}
+Release:        11%{?dist}
 Url:            https://github.com/mozilla-services/ldappool
 Summary:        A connection pool for python-ldap
 License:        MPLv1.1 and GPLv2+ and LGPLv2+
@@ -28,7 +28,7 @@ The pool has useful features like:\
 
 %package -n python2-%{srcname}
 Summary: %summary
-Requires:       python-ldap
+Requires:       python2-ldap
 %{?python_provide:%python_provide python2-%{srcname}}
 
 %description -n python2-%{srcname} %_description
@@ -53,6 +53,10 @@ python setup.py install --prefix=%{_prefix} --root=%{buildroot}
 %{python_sitelib}/*
 
 %changelog
+* Thu Jan 25 2018 Iryna Shcherbina <ishcherb@redhat.com> - 1.0-11
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.0-10
 - Python 2 binary package renamed to python2-ldappool
   See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
