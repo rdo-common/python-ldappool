@@ -12,7 +12,7 @@
 Name:           python-%{srcname}
 
 Version:        2.1.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Url:            https://github.com/mozilla-services/ldappool
 Summary:        A connection pool for python-ldap
 License:        MPLv1.1 and GPLv2+ and LGPLv2+
@@ -101,6 +101,9 @@ BuildRequires:  python3-testrepository
 
 
 %changelog
+* Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 2.1.0-3
+- Rebuilt for Python 3.7
+
 * Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 2.1.0-2
 - Rebuilt for Python 3.7
 
