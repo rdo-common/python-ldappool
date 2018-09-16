@@ -80,9 +80,9 @@ BuildRequires:  python3-testrepository
 
 %check
 %if %{with python3}
-%{__python3} setup.py testr
+PYTHON=python3 %{__python3} setup.py testr
 %endif
-%{__python2} setup.py testr
+PYTHON=python2 %{__python2} setup.py testr
 
 # FIXME: add license files as soon as upstream adds them
 # https://github.com/mozilla-services/ldappool/issues/2
