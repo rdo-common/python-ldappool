@@ -1,18 +1,9 @@
 %global srcname ldappool
 
-%if 0%{?rhel}
-%global py2_prefix python
-%bcond_with python3
-%else
-%global py2_prefix python2
-%bcond_without python3
-%endif
-
-
 Name:           python-%{srcname}
 
 Version:        2.1.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Url:            https://github.com/mozilla-services/ldappool
 Summary:        A connection pool for python-ldap
 License:        MPLv1.1 and GPLv2+ and LGPLv2+
@@ -34,21 +25,6 @@ The pool has useful features like:\
 
 %description %_description
 
-%package -n python2-%{srcname}
-Summary: %summary
-Requires:       %{py2_prefix}-ldap
-BuildRequires:  %{py2_prefix}-devel
-BuildRequires:  %{py2_prefix}-setuptools
-BuildRequires:  %{py2_prefix}-ldap
-BuildRequires:  %{py2_prefix}-pbr
-BuildRequires:  %{py2_prefix}-testtools
-BuildRequires:  %{py2_prefix}-testresources
-BuildRequires:  %{py2_prefix}-testrepository
-%{?python_provide:%python_provide python2-%{srcname}}
-
-%description -n python2-%{srcname} %_description
-
-%if %{with python3}
 %package -n python3-%{srcname}
 Summary: %summary
 Requires:       python3-pyldap
@@ -61,46 +37,33 @@ BuildRequires:  python3-testrepository
 %{?python_provide:%python_provide python3-%{srcname}}
 
 %description -n python3-%{srcname} %_description
-%endif
 
 %prep
 %setup -q -n %{srcname}-%{version}
 
 %build
-%py2_build
-%if %{with python3}
 %py3_build
-%endif
 
 %install
-%py2_install
-%if %{with python3}
 %py3_install
-%endif
 
 %check
-%if %{with python3}
 PYTHON=python3 %{__python3} setup.py testr
-%endif
-PYTHON=python2 %{__python2} setup.py testr
 
 # FIXME: add license files as soon as upstream adds them
 # https://github.com/mozilla-services/ldappool/issues/2
 
-%files -n python2-%{srcname}
-%doc README.rst
-%{python2_sitelib}/%{srcname}
-%{python2_sitelib}/%{srcname}-%{version}-py?.?.egg-info
-
-%if %{with python3}
 %files -n python3-%{srcname}
 %doc README.rst
 %{python3_sitelib}/%{srcname}
 %{python3_sitelib}/%{srcname}-%{version}-py?.?.egg-info
-%endif
 
 
 %changelog
+* Thu Oct 11 2018 Miro Hrončok <mhroncok@redhat.com> - 2.1.0-5
+- Python2 binary package has been removed
+  See https://fedoraproject.org/wiki/Changes/Mass_Python_2_Package_Removal
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.1.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
