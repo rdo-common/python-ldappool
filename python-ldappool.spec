@@ -3,7 +3,7 @@
 Name:           python-%{srcname}
 
 Version:        2.1.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Url:            https://github.com/mozilla-services/ldappool
 Summary:        A connection pool for python-ldap
 License:        MPLv1.1 and GPLv2+ and LGPLv2+
@@ -60,6 +60,9 @@ PYTHON=python3 %{__python3} setup.py testr
 
 
 %changelog
+* Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2.1.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Thu Oct 11 2018 Miro Hrončok <mhroncok@redhat.com> - 2.1.0-5
 - Python2 binary package has been removed
   See https://fedoraproject.org/wiki/Changes/Mass_Python_2_Package_Removal
